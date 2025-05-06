@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back-end  # Dossier du back-end
+      dockerfile: Dockerfile
+    ports:
+      - "5252:5252"  # Mappe le port 5252 du conteneur au port 5252 de l'hôte
+    networks:
+      - softy-pinko-network  # Crée un réseau commun pour la communication entre les services
+
+  frontend:
+    build:
+      context: ./front-end  # Dossier du front-end
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"  # Mappe le port 9000 du conteneur au port 9000 de l'hôte
+    networks:
+      - softy-pinko-network  # Utilise le même réseau pour la communication
+    depends_on:
+      - backend  # Le front-end attend que le back-end soit prêt avant de démarrer
+
+networks:
+  softy-pinko-network:
+    driver: bridge
