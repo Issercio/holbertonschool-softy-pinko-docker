@@ -1,22 +1,25 @@
 FROM ubuntu:latest
 
-# Mise à jour des paquets
-RUN apt-get update && apt-get upgrade -y
+# Update APT package lists
+RUN apt-get update
 
-# Installation de Python3 et pip3
+# Upgrade installed packages
+RUN apt-get upgrade -y
+
+# Install Python3 and pip3
 RUN apt-get install -y python3 python3-pip
 
-# Contourner l'erreur "This environment is externally managed"
-RUN rm /usr/lib/python*/EXTERNALLY-MANAGED || true
+# Fix for externally managed environment error
+RUN rm /usr/lib/python*/EXTERNALLY-MANAGED
 
-# Installer Flask via pip3
+# Install Flask using pip3
 RUN pip3 install flask
 
-# Définir le répertoire de travail
+# Set working directory
 WORKDIR /app
 
-# Copier le script Python
-COPY ./api.py /app/api.py
+# Copy Flask application to container
+COPY api.py /app/
 
-# Commande pour lancer le serveur Flask
+# Command to run Flask server
 CMD ["python3", "api.py"]

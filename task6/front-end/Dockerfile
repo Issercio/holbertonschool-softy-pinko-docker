@@ -1,6 +1,7 @@
 FROM nginx:latest
 
-COPY ./softy-pinko-front-end /usr/share/nginx/html
-COPY ./softy-pinko-front-end.conf /etc/nginx/conf.d/default.conf
+# Copy front-end files to nginx's serving directory
+COPY softy-pinko-front-end/ /var/www/html/softy-pinko-front-end/
 
-EXPOSE 9000
+# Copy Nginx configuration
+COPY softy-pinko-front-end.conf /etc/nginx/conf.d/default.conf

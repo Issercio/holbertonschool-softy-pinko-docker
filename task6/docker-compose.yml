@@ -1,36 +1,33 @@
-version: '3.8'
+version: '3'
 
 services:
-  front-end:
-    build:
-      context: ./front-end
-      dockerfile: Dockerfile
-    image: softy-pinko-front-end:task5
-    networks:
-      - softy-network
-    expose:
-      - "9000"  # Expose le port 9000 pour communication entre containers
-
   back-end:
     build:
       context: ./back-end
       dockerfile: Dockerfile
-    image: softy-pinko-back-end:task5
-    networks:
-      - softy-network
+    image: softy-pinko-back-end:task6
+    # Remove port mapping to host, only expose internally
     expose:
-      - "5252"  # Expose le port 5252 pour communication entre containers
+      - "5252"
+
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    image: softy-pinko-front-end:task6
+    # Remove port mapping to host, only expose internally
+    expose:
+      - "9000"
+    depends_on:
+      - back-end
 
   proxy:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    image: softy-pinko-proxy:task5
+    image: softy-pinko-proxy:task6
     ports:
-      - "80:80"  # Expose le port 80 sur la machine hôte pour accéder au proxy
-    networks:
-      - softy-network
-
-networks:
-  softy-network:
-    driver: bridge
+      - "80:80"
+    depends_on:
+      - front-end
+      - back-end
